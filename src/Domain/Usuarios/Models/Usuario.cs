@@ -1,0 +1,10 @@
+﻿namespace TigreDoMexico.DesbravaCash.Api.Domain.Usuarios.Models;
+
+public class Usuario
+{
+    public string Nome { get; set; } = string.Empty;
+    
+    public string Telefone { get; set; } = string.Empty;
+
+    public string Senha { get; set; } = string.Empty;
+}
