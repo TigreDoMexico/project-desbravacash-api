@@ -1,0 +1,19 @@
+using TigreDoMexico.DesbravaCash.Api.Modules;
+
+namespace TigreDoMexico.DesbravaCash.Api.Setup;
+
+public static class ApplicationBuilderExtensions
+{
+    public static IApplicationBuilder ConfigurarApplication(this IApplicationBuilder app)
+    {
+        return app;
+    }
+    
+    public static WebApplication MapearEndpoints(this WebApplication app)
+    {
+        app.MapHealthChecks("api/health");
+        app.RegisterEndpoints();
+
+        return app;
+    }
+}

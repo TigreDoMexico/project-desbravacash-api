@@ -1,0 +1,26 @@
+services:
+  postgres:
+    image: postgres:17-alpine
+    container_name: desbravacash-postgres
+    environment:
+      POSTGRES_DB: desbravacash
+      POSTGRES_USER: apisuer
+      POSTGRES_PASSWORD: apipass
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - desbravacash-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U apisuer -d desbravacash"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres_data:
+
+networks:
+  desbravacash-network:
+    driver: bridge
