@@ -1,7 +1,8 @@
 using TigreDoMexico.DesbravaCash.Api.Setup;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.RegistrarAppServices();
+builder.RegistrarAppServices()
+    .RegistrarAutenticacao();
 
 var app = builder.Build();
 

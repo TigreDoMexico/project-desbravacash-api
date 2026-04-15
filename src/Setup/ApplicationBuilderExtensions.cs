@@ -6,6 +6,8 @@ public static class ApplicationBuilderExtensions
 {
     public static IApplicationBuilder ConfigurarApplication(this IApplicationBuilder app)
     {
+        app.UseAuthentication();
+        app.UseAuthorization();
         return app;
     }
     

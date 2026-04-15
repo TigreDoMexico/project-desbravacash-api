@@ -1,6 +1,12 @@
-@TigreDoMexico.DesbravaCash.Api_HostAddress = http://localhost:5101
+@API_URL = http://localhost:5101
 
-GET {{TigreDoMexico.DesbravaCash.Api_HostAddress}}/weatherforecast/
+POST {{API_URL}}/api/auth/login
+Content-Type: application/json
 Accept: application/json
+
+{
+  "telefone": "123456789",
+  "senha": "senha123"
+}
 
 ###
