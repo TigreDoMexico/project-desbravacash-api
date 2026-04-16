@@ -2,7 +2,7 @@ using TigreDoMexico.DesbravaCash.Api.Infrastructure.Security;
 
 namespace TigreDoMexico.DesbravaCash.Api.Test.Infrastructure.Security;
 
-public class HashingTests
+public class HashingTest
 {
     [Fact]
     public void HashSenha_DeveRetornarHashNoFormatoCorreto()
