@@ -10,7 +10,13 @@ public static class ApplicationBuilderExtensions
         app.UseAuthorization();
         return app;
     }
-    
+
+    public static WebApplication ConfigurarCors(this WebApplication app)
+    {
+        app.UseCors("AllowFrontend");
+        return app;
+    }
+
     public static WebApplication MapearEndpoints(this WebApplication app)
     {
         app.MapHealthChecks("api/health");
