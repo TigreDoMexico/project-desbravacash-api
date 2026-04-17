@@ -11,7 +11,7 @@ public static class AppServiceExtensions
     public static WebApplicationBuilder RegistrarAppServices(this WebApplicationBuilder builder)
     {
         builder.Services.AddHealthChecks();
-        
+
         builder.AddModules();
 
         builder.Services.AddOpenApi();
@@ -19,7 +19,29 @@ public static class AppServiceExtensions
 
         return builder;
     }
-    
+
+    public static WebApplicationBuilder RegistrarCors(this WebApplicationBuilder builder)
+    {
+        var allowedOrigins = builder.Configuration
+            .GetSection("Cors:AllowedOrigins")
+            .Get<string[]>();
+
+        builder.Services.AddCors(options =>
+        {
+            options.AddPolicy("AllowFrontend",
+                policy =>
+                {
+                    policy
+                        .WithOrigins(allowedOrigins ?? [])
+                        .AllowAnyHeader()
+                        .AllowAnyMethod()
+                        .AllowCredentials();
+                });
+        });
+
+        return builder;
+    }
+
     public static WebApplicationBuilder RegistrarAutenticacao(this WebApplicationBuilder builder)
     {
         builder.Services
@@ -40,7 +62,7 @@ public static class AppServiceExtensions
             });
 
         builder.Services.AddAuthorization();
-        
+
         return builder;
     }
 }
