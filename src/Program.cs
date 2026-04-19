@@ -18,4 +18,6 @@ app
     .UseHttpsRedirection()
     .ConfigurarApplication();
 
+await app.AdicionarSeedDados();
+
 app.Run();

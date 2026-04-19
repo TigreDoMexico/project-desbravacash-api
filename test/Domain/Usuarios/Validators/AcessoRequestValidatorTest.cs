@@ -18,9 +18,9 @@ public class AcessoRequestValidatorTest
     [Theory]
     [InlineData("", "senha123")]
     [InlineData(null, "senha123")]
-    public void Deve_Ser_Invalido_Quando_Telefone_Vazio(string telefone, string senha)
+    public void Deve_Ser_Invalido_Quando_Telefone_Vazio(string? telefone, string senha)
     {
-        var request = new AcessoRequest { Telefone = telefone, Senha = senha };
+        var request = new AcessoRequest { Telefone = telefone!, Senha = senha };
         var result = _validator.Validate(request);
         Assert.False(result.IsValid);
         Assert.Contains(result.Errors, e => e.PropertyName == nameof(AcessoRequest.Telefone));
@@ -29,9 +29,9 @@ public class AcessoRequestValidatorTest
     [Theory]
     [InlineData("11999999999", "")]
     [InlineData("11999999999", null)]
-    public void Deve_Ser_Invalido_Quando_Senha_Vazia(string telefone, string senha)
+    public void Deve_Ser_Invalido_Quando_Senha_Vazia(string telefone, string? senha)
     {
-        var request = new AcessoRequest { Telefone = telefone, Senha = senha };
+        var request = new AcessoRequest { Telefone = telefone, Senha = senha! };
         var result = _validator.Validate(request);
         Assert.False(result.IsValid);
         Assert.Contains(result.Errors, e => e.PropertyName == nameof(AcessoRequest.Senha));

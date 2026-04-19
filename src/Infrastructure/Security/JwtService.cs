@@ -18,6 +18,8 @@ public class JwtService(IConfiguration configuration) : IJwtService
         {
             new Claim(JwtRegisteredClaimNames.Sub, usuario.Id.ToString()),
             new Claim(JwtRegisteredClaimNames.Name, usuario.Nome),
+            new Claim("unidade_id", usuario.UnidadeId.ToString()),
+            new Claim("cargo", usuario.Cargo),
         };
 
         var token = new JwtSecurityToken(
