@@ -11,3 +11,10 @@ Este projeto depende das seguintes informações configuradas:
 | `Jwt:Chave`       | chave secreta de 32 caracteres | `dotnet user-secrets set "Jwt:Chave" "SUA_CHAVE"`   |
 | `Jwt:Issuer`      | issuer da chave jwt            | `dotnet user-secrets set "Jwt:Chave" "ISSUER"`      |
 | `Jwt:Audience`    | audience da chave jwt          | `dotnet user-secrets set "Jwt:Audience" "AUDIENCE"` |
+
+## Migrations
+
+```bash
+ dotnet ef migrations add <nome migration>
+ dotnet ef database update
+```

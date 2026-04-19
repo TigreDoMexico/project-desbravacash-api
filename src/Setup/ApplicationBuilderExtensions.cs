@@ -1,3 +1,4 @@
+using TigreDoMexico.DesbravaCash.Api.Infrastructure.Data;
 using TigreDoMexico.DesbravaCash.Api.Modules;
 
 namespace TigreDoMexico.DesbravaCash.Api.Setup;
@@ -23,5 +24,14 @@ public static class ApplicationBuilderExtensions
         app.RegisterEndpoints();
 
         return app;
+    }
+
+    public static async Task AdicionarSeedDados(this WebApplication app)
+    {
+        using var scope = app.Services.CreateScope();
+        var context = scope.ServiceProvider.GetRequiredService<DesbravaCashDbContext>();
+        var config = scope.ServiceProvider.GetRequiredService<IConfiguration>();
+
+        await DesbravaCashSeeder.SeedAsync(context, config);
     }
 }
