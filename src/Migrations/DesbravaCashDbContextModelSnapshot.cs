@@ -92,10 +92,6 @@ namespace TigreDoMexico.DesbravaCash.Api.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("id");
 
-                    b.Property<bool>("Admin")
-                        .HasColumnType("boolean")
-                        .HasColumnName("admin");
-
                     b.Property<string>("Cargo")
                         .IsRequired()
                         .HasMaxLength(25)
@@ -107,6 +103,10 @@ namespace TigreDoMexico.DesbravaCash.Api.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)")
                         .HasColumnName("nome");
+
+                    b.Property<int>("Role")
+                        .HasColumnType("integer")
+                        .HasColumnName("role");
 
                     b.Property<string>("Senha")
                         .IsRequired()

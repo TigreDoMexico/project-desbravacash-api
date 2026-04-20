@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using TigreDoMexico.DesbravaCash.Api.Domain.Transacoes.Persistence;
 using TigreDoMexico.DesbravaCash.Api.Domain.Unidades.Persistence;
 using TigreDoMexico.DesbravaCash.Api.Domain.Usuarios.Persistence;
 using TigreDoMexico.DesbravaCash.Api.Infrastructure.Data.Repositories;
@@ -25,6 +26,7 @@ public class PostgresModule : IModule
     {
         services.AddScoped<IUsuarioRepository, UsuarioRepository>();
         services.AddScoped<IUnidadeRepository, UnidadeRepository>();
+        services.AddScoped<ITransacaoRepository, TransacaoRepository>();
     }
 
     private static IServiceCollection ExecutarMigrations(IServiceCollection services)

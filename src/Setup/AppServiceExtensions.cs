@@ -1,7 +1,10 @@
 ﻿using System.Text;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using TigreDoMexico.DesbravaCash.Api.Domain.Usuarios.Models;
 using TigreDoMexico.DesbravaCash.Api.Modules;
 
 namespace TigreDoMexico.DesbravaCash.Api.Setup;
@@ -16,6 +19,8 @@ public static class AppServiceExtensions
 
         builder.Services.AddOpenApi();
         builder.Services.AddValidatorsFromAssemblyContaining<Program>();
+        builder.Services.ConfigureHttpJsonOptions(options =>
+            options.SerializerOptions.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.CamelCase)));
 
         return builder;
     }
@@ -61,7 +66,11 @@ public static class AppServiceExtensions
                 };
             });
 
-        builder.Services.AddAuthorization();
+        builder.Services.AddAuthorization(options =>
+        {
+            options.AddPolicy("Admin", policy => policy.RequireRole(nameof(UsuarioRole.Admin)));
+            options.AddPolicy("Operador", policy => policy.RequireRole(nameof(UsuarioRole.Tesoureiro), nameof(UsuarioRole.Admin)));
+        });
 
         return builder;
     }

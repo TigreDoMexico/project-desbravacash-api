@@ -22,7 +22,7 @@ public class DesbravaCashDbContext(DbContextOptions<DesbravaCashDbContext> optio
             e.Property(x => x.Telefone).HasColumnName("telefone").IsRequired();
             e.Property(x => x.Senha).HasColumnName("senha").IsRequired();
             e.Property(x => x.Cargo).HasColumnName("cargo").IsRequired();
-            e.Property(x => x.Admin).HasColumnName("admin").IsRequired();
+            e.Property(x => x.Role).HasColumnName("role").IsRequired();
             e.Property(x => x.UnidadeId).HasColumnName("unidade_id").IsRequired();
             e.HasOne(x => x.Unidade)
                 .WithMany(x => x.Usuarios)

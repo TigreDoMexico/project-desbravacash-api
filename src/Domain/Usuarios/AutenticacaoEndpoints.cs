@@ -1,4 +1,5 @@
 using FluentValidation;
+using TigreDoMexico.DesbravaCash.Api.Domain.Usuarios.Models;
 using TigreDoMexico.DesbravaCash.Api.Domain.Usuarios.Requests;
 using TigreDoMexico.DesbravaCash.Api.Domain.Usuarios.Responses;
 using TigreDoMexico.DesbravaCash.Api.Domain.Usuarios.Services;
@@ -25,7 +26,7 @@ public class AutenticacaoEndpoints : IEndpoint
                 var usuario = await service.AcessarAsync(request.Telefone, request.Senha, ct);
                 return usuario is null
                     ? Results.Unauthorized()
-                    : Results.Ok(new AcessoResponse(jwt.GerarToken(usuario)));
+                    : Results.Ok(new AcessoResponse(jwt.GerarToken(usuario), usuario.Role));
             });
     }
 }

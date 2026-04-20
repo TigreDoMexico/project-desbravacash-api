@@ -30,7 +30,7 @@ public class Usuario
     public string Cargo { get; set; } = string.Empty;
 
     [Required]
-    public bool Admin { get; set; }
+    public UsuarioRole Role { get; set; }
 
     public ICollection<Transacao> Transacoes { get; set; } = [];
 }
