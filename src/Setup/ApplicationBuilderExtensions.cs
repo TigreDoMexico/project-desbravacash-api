@@ -18,6 +18,12 @@ public static class ApplicationBuilderExtensions
         return app;
     }
 
+    public static WebApplication ConfigurarRateLimit(this WebApplication app)
+    {
+        app.UseRateLimiter();
+        return app;
+    }
+
     public static WebApplication MapearEndpoints(this WebApplication app)
     {
         app.MapHealthChecks("api/health");

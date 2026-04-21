@@ -4,5 +4,5 @@ public enum StatusTransacao
 {
     Pendente,
     Aprovado,
-    Rejeitado
+    Recusado
 }

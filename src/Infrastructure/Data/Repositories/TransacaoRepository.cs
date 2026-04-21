@@ -6,15 +6,30 @@ namespace TigreDoMexico.DesbravaCash.Api.Infrastructure.Data.Repositories;
 
 public class TransacaoRepository(DesbravaCashDbContext db)  : ITransacaoRepository
 {
-    public async Task AdicionarAsync(Transacao transacao, CancellationToken ct)
+    public async Task<Transacao?> ObterTransacaoPorIdAsync(Guid transacaoId, CancellationToken ct)
+        => await db.Transacoes.FindAsync([transacaoId], ct);
+
+    public async Task AdicionarPendenteAsync(Transacao transacao, CancellationToken ct)
     {
         db.Transacoes.Add(transacao);
         await db.SaveChangesAsync(ct);
     }
 
+    public async Task AtualizarTransacaoAsync(Transacao transacao, CancellationToken ct)
+    {
+        db.Transacoes.Update(transacao);
+        await db.SaveChangesAsync(ct);
+    }
+
+    public async Task<List<Transacao>> ListarTransacoesPendentesAsync(CancellationToken ct)
+        => await db.Transacoes
+            .Where(t => t.Status == StatusTransacao.Pendente)
+            .OrderByDescending(t => t.CriadoEm)
+            .ToListAsync(ct);
+
     public async Task<List<Transacao>> ListarTodasTransacoesPorUnidadeAsync(Guid unidadeId, CancellationToken ct)
         => await db.Transacoes
-            .Where(t => t.UnidadeId == unidadeId)
+            .Where(t => t.UnidadeId == unidadeId && t.Status != StatusTransacao.Aprovado)
             .OrderByDescending(t => t.CriadoEm)
             .ToListAsync(ct);
 }

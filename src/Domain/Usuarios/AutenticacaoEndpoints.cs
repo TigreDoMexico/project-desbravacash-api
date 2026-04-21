@@ -1,5 +1,4 @@
 using FluentValidation;
-using TigreDoMexico.DesbravaCash.Api.Domain.Usuarios.Models;
 using TigreDoMexico.DesbravaCash.Api.Domain.Usuarios.Requests;
 using TigreDoMexico.DesbravaCash.Api.Domain.Usuarios.Responses;
 using TigreDoMexico.DesbravaCash.Api.Domain.Usuarios.Services;

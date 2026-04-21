@@ -19,10 +19,10 @@ public class UnidadeEndpoints : IEndpoint
             var unidade = await service.BuscarDashboardAsync(usuarioId, unidadeId, ct);
             return unidade is null ? Results.NotFound() : Results.Ok(unidade);
         }).RequireAuthorization();
-        
+
         endpoints.MapGet("/api/unidades", async (
             IUnidadeService service,
             CancellationToken ct) => Results.Ok((object?)await service.ListarAsync(ct)))
-            .RequireAuthorization("Admin");
+            .RequireAuthorization(RolesConsts.Admin);
     }
 }

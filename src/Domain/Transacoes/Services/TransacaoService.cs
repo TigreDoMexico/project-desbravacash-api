@@ -12,7 +12,7 @@ public class TransacaoService(ITransacaoRepository repository) : ITransacaoServi
         var transacao = new Transacao
         {
             Id = Guid.NewGuid(),
-            Tipo = request.Tipo,
+            Tipo = request.TipoTransacao,
             Status = StatusTransacao.Pendente,
             Valor = request.Valor,
             Descricao = request.Descricao,
@@ -21,7 +21,25 @@ public class TransacaoService(ITransacaoRepository repository) : ITransacaoServi
             CriadoPor = usuarioId,
         };
 
-        await repository.AdicionarAsync(transacao, ct);
+        await repository.AdicionarPendenteAsync(transacao, ct);
+    }
+
+    public async Task AtualizarStatusTransacaoAsync(Guid transacaoId, StatusTransacao novoStatus, CancellationToken ct)
+    {
+        var transacao = await repository.ObterTransacaoPorIdAsync(transacaoId, ct);
+        if (transacao is null) return;
+
+        transacao.Status = novoStatus;
+        await repository.AtualizarTransacaoAsync(transacao, ct);
+    }
+
+    public async Task<ListarDadosTransacaoResponse> ObterTransacoesPendentesAsync(CancellationToken ct)
+    {
+        var transacoes = await repository.ListarTransacoesPendentesAsync(ct);
+        return new ListarDadosTransacaoResponse
+        {
+            Transacoes = transacoes.Select(t => (DadosTransacaoResponse)t).ToList()
+        };
     }
 
     public async Task<ListarDadosTransacaoResponse> ObterTransacoesPorUnidadeAsync(Guid unidadeId, CancellationToken ct)

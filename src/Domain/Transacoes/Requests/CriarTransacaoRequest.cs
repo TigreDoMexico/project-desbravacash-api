@@ -10,5 +10,5 @@ public class CriarTransacaoRequest
 
     public string Descricao { get; set; } = string.Empty;
 
-    public TipoTransacao Tipo { get; set; }
+    public TipoTransacao TipoTransacao { get; set; }
 }

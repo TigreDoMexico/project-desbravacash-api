@@ -18,13 +18,16 @@ public class DadosTransacaoResponse
     public string Mes { get; set; } = string.Empty;
 
     public static implicit operator DadosTransacaoResponse(Transacao transacao)
-        => new()
+    {
+        var cultura = new CultureInfo("pt-BR");
+        return new DadosTransacaoResponse
         {
             Id = transacao.Id.ToString(),
             Valor = transacao.Valor.ToString(),
             Descricao = transacao.Descricao,
             Tipo = transacao.Tipo.ToString(),
             Status = transacao.Status.ToString(),
-            Mes = transacao.CriadoEm.Month.ToString(CultureInfo.InvariantCulture)
+            Mes = cultura.TextInfo.ToTitleCase(transacao.CriadoEm.ToString("MMMM", cultura)),
         };
+    }
 }
