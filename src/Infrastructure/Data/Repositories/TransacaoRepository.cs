@@ -23,13 +23,14 @@ public class TransacaoRepository(DesbravaCashDbContext db)  : ITransacaoReposito
 
     public async Task<List<Transacao>> ListarTransacoesPendentesAsync(CancellationToken ct)
         => await db.Transacoes
+            .Include(t => t.Unidade)
             .Where(t => t.Status == StatusTransacao.Pendente)
             .OrderByDescending(t => t.CriadoEm)
             .ToListAsync(ct);
 
     public async Task<List<Transacao>> ListarTodasTransacoesPorUnidadeAsync(Guid unidadeId, CancellationToken ct)
         => await db.Transacoes
-            .Where(t => t.UnidadeId == unidadeId && t.Status != StatusTransacao.Aprovado)
+            .Where(t => t.UnidadeId == unidadeId)
             .OrderByDescending(t => t.CriadoEm)
             .ToListAsync(ct);
 }

@@ -17,6 +17,8 @@ public class DadosTransacaoResponse
 
     public string Mes { get; set; } = string.Empty;
 
+    public string? NomeUnidade { get; set; }
+
     public static implicit operator DadosTransacaoResponse(Transacao transacao)
     {
         var cultura = new CultureInfo("pt-BR");
@@ -28,6 +30,7 @@ public class DadosTransacaoResponse
             Tipo = transacao.Tipo.ToString(),
             Status = transacao.Status.ToString(),
             Mes = cultura.TextInfo.ToTitleCase(transacao.CriadoEm.ToString("MMMM", cultura)),
+            NomeUnidade = transacao.Unidade?.Nome,
         };
     }
 }

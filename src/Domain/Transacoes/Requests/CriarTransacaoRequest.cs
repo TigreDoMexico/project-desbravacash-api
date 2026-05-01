@@ -1,4 +1,5 @@
-﻿using TigreDoMexico.DesbravaCash.Api.Domain.Transacoes.Models;
+﻿using System.Text.Json.Serialization;
+using TigreDoMexico.DesbravaCash.Api.Domain.Transacoes.Models;
 
 namespace TigreDoMexico.DesbravaCash.Api.Domain.Transacoes.Requests;
 
