@@ -26,7 +26,10 @@ public static class ApplicationBuilderExtensions
 
     public static WebApplication MapearEndpoints(this WebApplication app)
     {
+        var version = typeof(Program).Assembly.GetName().Version?.ToString(3) ?? "0.1.0";
+
         app.MapHealthChecks("api/health");
+        app.MapGet("api/version", () => Results.Ok(new { version })).AllowAnonymous();
         app.RegisterEndpoints();
 
         return app;

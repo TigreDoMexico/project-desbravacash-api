@@ -1,6 +1,16 @@
 @API_URL = http://localhost:5101
 @TOKEN = <bearer_token>
 
+### Health Check
+
+GET {{API_URL}}/api/health
+
+### Versão da API
+
+GET {{API_URL}}/api/version
+
+### Autenticação
+
 POST {{API_URL}}/api/auth/login
 Content-Type: application/json
 Accept: application/json
@@ -10,31 +20,27 @@ Accept: application/json
   "senha": "senha123"
 }
 
-###
-
-### Unidades
+### Listar dados da Unidade
 
 GET {{API_URL}}/api/unidades/dashboard
 Authorization: Bearer {{TOKEN}}
 
-###
+### Obter lista de unidades
 
 GET {{API_URL}}/api/unidades
 Authorization: Bearer {{TOKEN}}
 
-###
-
-### Transações
+### Listar Transações pela Unidade
 
 GET {{API_URL}}/api/transacoes
 Authorization: Bearer {{TOKEN}}
 
-###
+### Listar todas as Transações Pendentes
 
 GET {{API_URL}}/api/transacoes/pendentes
 Authorization: Bearer {{TOKEN}}
 
-###
+### Cria uma nova Transação
 
 POST {{API_URL}}/api/transacoes
 Content-Type: application/json
@@ -47,7 +53,7 @@ Authorization: Bearer {{TOKEN}}
   "tipoTransacao": 1
 }
 
-###
+### Atualiza o status de uma Transação
 
 PUT {{API_URL}}/api/transacoes/00000000-0000-0000-0000-000000000000/status
 Content-Type: application/json
