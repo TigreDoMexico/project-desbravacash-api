@@ -14,12 +14,13 @@ public class JwtService(IConfiguration configuration) : IJwtService
         var chave = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Chave"]!));
         var credenciais = new SigningCredentials(chave, SecurityAlgorithms.HmacSha256);
 
-        var claims = new[]
+        var claims = new List<Claim>
         {
-            new Claim(JwtRegisteredClaimNames.Sub, usuario.Id.ToString()),
-            new Claim(JwtRegisteredClaimNames.Name, usuario.Nome),
-            new Claim("unidade_id", usuario.UnidadeId.ToString()),
-            new Claim("cargo", usuario.Cargo),
+            new(JwtRegisteredClaimNames.Sub, usuario.Id.ToString()),
+            new(JwtRegisteredClaimNames.Name, usuario.Nome),
+            new("unidade_id", usuario.UnidadeId.ToString()),
+            new("cargo", usuario.Cargo),
+            new(ClaimTypes.Role, usuario.Role.ToString()),
         };
 
         var token = new JwtSecurityToken(

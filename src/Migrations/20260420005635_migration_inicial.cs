@@ -33,7 +33,7 @@ namespace TigreDoMexico.DesbravaCash.Api.Migrations
                     senha = table.Column<string>(type: "character varying(80)", maxLength: 80, nullable: false),
                     unidade_id = table.Column<Guid>(type: "uuid", nullable: false),
                     cargo = table.Column<string>(type: "character varying(25)", maxLength: 25, nullable: false),
-                    admin = table.Column<bool>(type: "boolean", nullable: false)
+                    role = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {

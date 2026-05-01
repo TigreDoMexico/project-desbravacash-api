@@ -25,20 +25,37 @@ public static class DesbravaCashSeeder
                 adminUnidadeId = unidade.Id;
             }
 
-            var senha = config["Seed:Admin:Senha"];
-            var telefone = config["Seed:Admin:Telefone"];
+            var senhaAdmin = config["Seed:Admin:Senha"];
+            var telefoneAdmin = config["Seed:Admin:Telefone"];
 
-            var usuario = new Usuario
+            var senhaTesoureiro = config["Seed:Tesoureiro:Senha"];
+            var telefoneTesoureiro = config["Seed:Tesoureiro:Telefone"];
+
+            var usuarioAdmin = new Usuario
             {
                 Id = Guid.NewGuid(),
                 Nome = "Admin",
-                Telefone = telefone ?? "123456789",
-                Senha = Hashing.HashSenha(senha ?? "senha"),
+                Telefone = telefoneAdmin ?? "123456789",
+                Senha = Hashing.HashSenha(senhaAdmin ?? "senha"),
                 UnidadeId = adminUnidadeId,
                 Cargo = "Admin",
+                Role = UsuarioRole.Admin,
             };
 
-            context.Usuarios.Add(usuario);
+            context.Usuarios.Add(usuarioAdmin);
+
+            var usuarioTesoureiro = new Usuario
+            {
+                Id = Guid.NewGuid(),
+                Nome = "Tesoureiro",
+                Telefone = telefoneTesoureiro ?? "123456789",
+                Senha = Hashing.HashSenha(senhaTesoureiro ?? "senha"),
+                UnidadeId = adminUnidadeId,
+                Cargo = "Tesoureiro",
+                Role = UsuarioRole.Tesoureiro,
+            };
+
+            context.Usuarios.Add(usuarioTesoureiro);
 
             await context.SaveChangesAsync();
         }

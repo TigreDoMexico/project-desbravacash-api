@@ -1,7 +1,12 @@
 ﻿using System.Text;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using System.Threading.RateLimiting;
 using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.IdentityModel.Tokens;
+using TigreDoMexico.DesbravaCash.Api.Domain.Usuarios.Models;
 using TigreDoMexico.DesbravaCash.Api.Modules;
 
 namespace TigreDoMexico.DesbravaCash.Api.Setup;
@@ -16,6 +21,8 @@ public static class AppServiceExtensions
 
         builder.Services.AddOpenApi();
         builder.Services.AddValidatorsFromAssemblyContaining<Program>();
+        builder.Services.ConfigureHttpJsonOptions(options =>
+            options.SerializerOptions.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.CamelCase)));
 
         return builder;
     }
@@ -42,6 +49,29 @@ public static class AppServiceExtensions
         return builder;
     }
 
+    public static WebApplicationBuilder RegistrarRateLimit(this WebApplicationBuilder builder)
+    {
+        builder.Services.AddRateLimiter(options =>
+        {
+            options.AddFixedWindowLimiter("fixed", opt =>
+            {
+                opt.PermitLimit = 10;
+                opt.Window = TimeSpan.FromSeconds(10);
+            });
+
+            options.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, string>(context =>
+                RateLimitPartition.GetFixedWindowLimiter(
+                    partitionKey: context.Connection.RemoteIpAddress?.ToString() ?? "global",
+                    factory: _ => new FixedWindowRateLimiterOptions
+                    {
+                        PermitLimit = 10,
+                        Window = TimeSpan.FromSeconds(10)
+                    }));
+        });
+
+        return builder;
+    }
+
     public static WebApplicationBuilder RegistrarAutenticacao(this WebApplicationBuilder builder)
     {
         builder.Services
@@ -61,7 +91,12 @@ public static class AppServiceExtensions
                 };
             });
 
-        builder.Services.AddAuthorization();
+        builder.Services.AddAuthorization(options =>
+        {
+            options.AddPolicy("Admin", policy => policy.RequireRole(nameof(UsuarioRole.Admin)));
+            options.AddPolicy("Tesoureiro",
+                policy => policy.RequireRole(nameof(UsuarioRole.Tesoureiro), nameof(UsuarioRole.Admin)));
+        });
 
         return builder;
     }

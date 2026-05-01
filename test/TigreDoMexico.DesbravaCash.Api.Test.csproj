@@ -24,4 +24,8 @@
     <ProjectReference Include="..\src\TigreDoMexico.DesbravaCash.Api.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Domain\Transacoes\" />
+  </ItemGroup>
+
 </Project>

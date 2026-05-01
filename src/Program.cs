@@ -1,8 +1,10 @@
 using TigreDoMexico.DesbravaCash.Api.Setup;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.RegistrarAppServices()
+builder
+    .RegistrarAppServices()
     .RegistrarCors()
+    .RegistrarRateLimit()
     .RegistrarAutenticacao();
 
 var app = builder.Build();
@@ -14,6 +16,7 @@ if (app.Environment.IsDevelopment())
 
 app
     .ConfigurarCors()
+    .ConfigurarRateLimit()
     .MapearEndpoints()
     .UseHttpsRedirection()
     .ConfigurarApplication();

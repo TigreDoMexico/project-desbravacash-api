@@ -8,7 +8,7 @@ public class UnidadeEndpoints : IEndpoint
 {
     public static void MapEndpoint(IEndpointRouteBuilder endpoints)
     {
-        endpoints.MapGet("/api/unidade/dashboard", async (
+        endpoints.MapGet("/api/unidades/dashboard", async (
             ClaimsPrincipal user,
             IUnidadeService service,
             CancellationToken ct) =>
@@ -19,5 +19,10 @@ public class UnidadeEndpoints : IEndpoint
             var unidade = await service.BuscarDashboardAsync(usuarioId, unidadeId, ct);
             return unidade is null ? Results.NotFound() : Results.Ok(unidade);
         }).RequireAuthorization();
+
+        endpoints.MapGet("/api/unidades", async (
+            IUnidadeService service,
+            CancellationToken ct) => Results.Ok((object?)await service.ListarAsync(ct)))
+            .RequireAuthorization(RolesConsts.Admin);
     }
 }
