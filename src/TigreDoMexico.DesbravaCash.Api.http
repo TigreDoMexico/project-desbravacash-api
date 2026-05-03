@@ -1,4 +1,4 @@
-@API_URL = http://localhost:5101
+@API_URL = http://localhost:8080
 @TOKEN = <bearer_token>
 
 ### Health Check
