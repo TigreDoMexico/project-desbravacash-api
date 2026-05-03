@@ -11,8 +11,15 @@ public class PostgresModule : IModule
 {
     public static void ConfigureServices(WebApplicationBuilder builder)
     {
-        builder.Services.AddDbContext<DesbravaCashDbContext>(opt =>
-            opt.UseNpgsql(builder.Configuration.GetConnectionString("Postgres")));
+        var connectionString = builder.Configuration.GetConnectionString("Postgres");
+        var certPath = ObterCaminhoCertificado(builder.Configuration);
+
+        if (!string.IsNullOrEmpty(certPath))
+        {
+            connectionString += $";Root Certificate={certPath}";
+        }
+
+        builder.Services.AddDbContext<DesbravaCashDbContext>(opt => opt.UseNpgsql(connectionString));
 
         ConfigurarDependencias(builder.Services);
 
@@ -20,6 +27,19 @@ public class PostgresModule : IModule
         {
             ExecutarMigrations(builder.Services);
         }
+    }
+
+    private static string? ObterCaminhoCertificado(IConfiguration configuration)
+    {
+        var certBase64 = configuration["Database:CertBase64"];
+        if (string.IsNullOrEmpty(certBase64))
+        {
+            return configuration["Database:CertPath"];
+        }
+
+        var certPath = Path.Combine(Path.GetTempPath(), "db-ca.pem");
+        File.WriteAllBytes(certPath, Convert.FromBase64String(certBase64));
+        return certPath;
     }
 
     private static void ConfigurarDependencias(IServiceCollection services)
