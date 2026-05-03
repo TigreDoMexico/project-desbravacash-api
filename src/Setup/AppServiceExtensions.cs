@@ -24,6 +24,8 @@ public static class AppServiceExtensions
         builder.Services.ConfigureHttpJsonOptions(options =>
             options.SerializerOptions.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.CamelCase)));
 
+        builder.WebHost.UseUrls("http://0.0.0.0:8080");
+
         return builder;
     }
 

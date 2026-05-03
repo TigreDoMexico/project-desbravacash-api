@@ -4,4 +4,5 @@ public enum UsuarioRole
 {
     Tesoureiro = 0,
     Admin = 1,
+    Normal = 2,
 }
