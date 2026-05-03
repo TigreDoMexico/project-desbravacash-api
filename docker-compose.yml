@@ -1,19 +1,20 @@
 services:
-#  api:
-#    build: .
-#    container_name: desbravacash-api
-#    ports:
-#      - "8080:8080"
-#    environment:
-#      - ConnectionStrings__Postgres=Host=postgres;Port=5432;Database=desbravacash;Username=apisuer;Password=apipass
-#      - Jwt__Chave=<chave secreta de 32 caracteres>
-#      - Jwt__Issuer=<issuer>
-#      - Jwt__Audience=<audience>
-#    depends_on:
-#      postgres:
-#        condition: service_healthy
-#    networks:
-#      - desbravacash-network
+  api:
+    build: .
+    container_name: desbravacash-api
+    ports:
+      - "8080:8080"
+    environment:
+      - ConnectionStrings__Postgres=Host=postgres;Port=5432;Database=desbravacash;Username=apisuer;Password=apipass
+      - Jwt__Chave=teste
+      - Jwt__Issuer=teste
+      - Jwt__Audience=teste
+      - Database__CertBase64=teste
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - desbravacash-network
 
   postgres:
     image: postgres:17-alpine

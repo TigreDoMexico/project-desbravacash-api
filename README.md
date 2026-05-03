@@ -15,7 +15,7 @@ Temos um [FrontEnd](https://github.com/TigreDoMexico/project-desbravacash-app) f
 
 | Tecnologia                                                  | Versão | Uso                                                      |
 | ----------------------------------------------------------- | ------ | -------------------------------------------------------- |
-| [.NET SDK](https://dotnet.microsoft.com/download)           | 10.0   | Compilar e executar a API                                |
+| [.NET SDK](https://dotnet.microsoft.com/download)           | 9.0   | Compilar e executar a API                                |
 | [Docker](https://www.docker.com/products/docker-desktop)    | -      | Subir o banco de dados PostgreSQL                        |
 | [dotnet-ef](https://learn.microsoft.com/ef/core/cli/dotnet) | -      | Executar migrations (`dotnet tool install -g dotnet-ef`) |
 
