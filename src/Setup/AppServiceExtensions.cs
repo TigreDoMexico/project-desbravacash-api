@@ -31,20 +31,15 @@ public static class AppServiceExtensions
 
     public static WebApplicationBuilder RegistrarCors(this WebApplicationBuilder builder)
     {
-        var allowedOrigins = builder.Configuration
-            .GetSection("Cors:AllowedOrigins")
-            .Get<string[]>();
-
         builder.Services.AddCors(options =>
         {
             options.AddPolicy("AllowFrontend",
                 policy =>
                 {
                     policy
-                        .WithOrigins(allowedOrigins ?? [])
+                        .AllowAnyOrigin()
                         .AllowAnyHeader()
-                        .AllowAnyMethod()
-                        .AllowCredentials();
+                        .AllowAnyMethod();
                 });
         });
 
