@@ -22,78 +22,6 @@ namespace TigreDoMexico.DesbravaCash.Api.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("TigreDoMexico.DesbravaCash.Api.Domain.Desafios.Models.Desafio", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasColumnName("id");
-
-                    b.Property<DateTime>("DataConclusao")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("data_conclusao");
-
-                    b.Property<string>("Descricao")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)")
-                        .HasColumnName("descricao");
-
-                    b.Property<bool>("PodeSolicitar")
-                        .HasColumnType("boolean")
-                        .HasColumnName("pode_solicitar");
-
-                    b.Property<int>("Pontuacao")
-                        .HasColumnType("integer")
-                        .HasColumnName("pontuacao");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("desafio", (string)null);
-                });
-
-            modelBuilder.Entity("TigreDoMexico.DesbravaCash.Api.Domain.Desafios.Models.SolicitacaoDesafio", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasColumnName("id");
-
-                    b.Property<DateTimeOffset>("CriadoEm")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("criado_em");
-
-                    b.Property<Guid>("CriadoPor")
-                        .HasColumnType("uuid")
-                        .HasColumnName("criado_por");
-
-                    b.Property<Guid>("DesafioId")
-                        .HasColumnType("uuid");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("integer")
-                        .HasColumnName("status");
-
-                    b.Property<Guid?>("TransacaoId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("transacao_id");
-
-                    b.Property<Guid>("UnidadeId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CriadoPor");
-
-                    b.HasIndex("DesafioId");
-
-                    b.HasIndex("TransacaoId");
-
-                    b.HasIndex("UnidadeId");
-
-                    b.ToTable("solicitacao_desafio", (string)null);
-                });
-
             modelBuilder.Entity("TigreDoMexico.DesbravaCash.Api.Domain.Transacoes.Models.Transacao", b =>
                 {
                     b.Property<Guid>("Id")
@@ -201,39 +129,6 @@ namespace TigreDoMexico.DesbravaCash.Api.Migrations
                     b.HasIndex("UnidadeId");
 
                     b.ToTable("usuario", (string)null);
-                });
-
-            modelBuilder.Entity("TigreDoMexico.DesbravaCash.Api.Domain.Desafios.Models.SolicitacaoDesafio", b =>
-                {
-                    b.HasOne("TigreDoMexico.DesbravaCash.Api.Domain.Usuarios.Models.Usuario", "CriadoPorUsuario")
-                        .WithMany()
-                        .HasForeignKey("CriadoPor")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("TigreDoMexico.DesbravaCash.Api.Domain.Desafios.Models.Desafio", "Desafio")
-                        .WithMany()
-                        .HasForeignKey("DesafioId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("TigreDoMexico.DesbravaCash.Api.Domain.Transacoes.Models.Transacao", "Transacao")
-                        .WithMany()
-                        .HasForeignKey("TransacaoId");
-
-                    b.HasOne("TigreDoMexico.DesbravaCash.Api.Domain.Unidades.Models.Unidade", "Unidade")
-                        .WithMany()
-                        .HasForeignKey("UnidadeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("CriadoPorUsuario");
-
-                    b.Navigation("Desafio");
-
-                    b.Navigation("Transacao");
-
-                    b.Navigation("Unidade");
                 });
 
             modelBuilder.Entity("TigreDoMexico.DesbravaCash.Api.Domain.Transacoes.Models.Transacao", b =>

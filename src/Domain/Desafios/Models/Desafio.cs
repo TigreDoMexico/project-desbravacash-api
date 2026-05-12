@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TigreDoMexico.DesbravaCash.Api.Domain.Desafios.Models;
 
@@ -19,4 +20,10 @@ public class Desafio
 
     [Required]
     public bool PodeSolicitar { get; set; } = false;
+
+    [NotMapped]
+    public bool Solicitado { get; set; }
+    
+    [NotMapped]
+    public bool Concluido { get; set; }
 }

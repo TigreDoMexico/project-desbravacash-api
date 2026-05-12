@@ -11,10 +11,7 @@ public class Transacao
 
     [Required]
     public TipoTransacao Tipo { get; set; }
-
-    [Required]
-    public StatusTransacao Status { get; set; }
-
+    
     [Required]
     public int Valor { get; set; }
 

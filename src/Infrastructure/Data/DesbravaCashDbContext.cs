@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using TigreDoMexico.DesbravaCash.Api.Domain.Desafios.Models;
+using TigreDoMexico.DesbravaCash.Api.Domain.Solicitacoes.Models;
 using TigreDoMexico.DesbravaCash.Api.Domain.Transacoes.Models;
 using TigreDoMexico.DesbravaCash.Api.Domain.Unidades.Models;
 using TigreDoMexico.DesbravaCash.Api.Domain.Usuarios.Models;
@@ -12,7 +13,7 @@ public class DesbravaCashDbContext(DbContextOptions<DesbravaCashDbContext> optio
     public DbSet<Unidade> Unidades => Set<Unidade>();
     public DbSet<Transacao> Transacoes => Set<Transacao>();
     public DbSet<Desafio> Desafios => Set<Desafio>();
-    public DbSet<SolicitacaoDesafio> SolicitacoesDesafio => Set<SolicitacaoDesafio>();
+    public DbSet<Solicitacao> Solicitacoes => Set<Solicitacao>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -49,38 +50,16 @@ public class DesbravaCashDbContext(DbContextOptions<DesbravaCashDbContext> optio
             e.Property(x => x.Pontuacao).HasColumnName("pontuacao").IsRequired();
             e.Property(x => x.DataConclusao).HasColumnName("data_conclusao").IsRequired();
             e.Property(x => x.PodeSolicitar).HasColumnName("pode_solicitar").IsRequired();
+            e.Ignore(x => x.Solicitado);
+            e.Ignore(x => x.Concluido);
         });
-
-        modelBuilder.Entity<SolicitacaoDesafio>(e =>
-        {
-            e.ToTable("solicitacao_desafio");
-            e.HasKey(x => x.Id);
-            e.Property(x => x.Id).HasColumnName("id");
-            e.Property(x => x.Status).HasColumnName("status").IsRequired();
-            e.Property(x => x.CriadoEm).HasColumnName("criado_em").IsRequired();
-            e.Property(x => x.CriadoPor).HasColumnName("criado_por").IsRequired();
-            e.Property(x => x.TransacaoId).HasColumnName("transacao_id");
-            e.HasOne(x => x.Unidade)
-                .WithMany()
-                .HasForeignKey(x => x.UnidadeId);
-            e.HasOne(x => x.Desafio)
-                .WithMany()
-                .HasForeignKey(x => x.DesafioId);
-            e.HasOne(x => x.CriadoPorUsuario)
-                .WithMany()
-                .HasForeignKey(x => x.CriadoPor);
-            e.HasOne(x => x.Transacao)
-                .WithMany()
-                .HasForeignKey(x => x.TransacaoId);
-        });
-
+        
         modelBuilder.Entity<Transacao>(e =>
         {
             e.ToTable("transacao");
             e.HasKey(x => x.Id);
             e.Property(x => x.Id).HasColumnName("id");
             e.Property(x => x.Tipo).HasColumnName("tipo").IsRequired();
-            e.Property(x => x.Status).HasColumnName("status").IsRequired();
             e.Property(x => x.Valor).HasColumnName("valor").IsRequired();
             e.Property(x => x.Descricao).HasColumnName("descricao").IsRequired();
             e.Property(x => x.CriadoEm).HasColumnName("criado_em").IsRequired();
@@ -91,6 +70,34 @@ public class DesbravaCashDbContext(DbContextOptions<DesbravaCashDbContext> optio
             e.HasOne(x => x.CriadoPorUsuario)
                 .WithMany(x => x.Transacoes)
                 .HasForeignKey(x => x.CriadoPor);
+        });
+
+        modelBuilder.Entity<Solicitacao>(e =>
+        {
+            e.ToTable("solicitacao");
+            e.HasKey(x => x.Id);
+            e.Property(x => x.Id).HasColumnName("id");
+            e.Property(x => x.Tipo).HasColumnName("tipo").IsRequired();
+            e.Property(x => x.Status).HasColumnName("status").IsRequired();
+            e.Property(x => x.Valor).HasColumnName("valor").IsRequired();
+            e.Property(x => x.Descricao).HasColumnName("descricao").IsRequired();
+            e.Property(x => x.CriadoEm).HasColumnName("criado_em").IsRequired();
+            e.Property(x => x.CriadoPor).HasColumnName("criado_por").IsRequired();
+            e.Property(x => x.UnidadeId).HasColumnName("unidade_id").IsRequired();
+            e.Property(x => x.DesafioId).HasColumnName("desafio_id");
+            e.Property(x => x.TransacaoId).HasColumnName("transacao_id");
+            e.HasOne(x => x.Unidade)
+                .WithMany()
+                .HasForeignKey(x => x.UnidadeId);
+            e.HasOne(x => x.CriadoPorUsuario)
+                .WithMany()
+                .HasForeignKey(x => x.CriadoPor);
+            e.HasOne(x => x.Desafio)
+                .WithMany()
+                .HasForeignKey(x => x.DesafioId);
+            e.HasOne(x => x.Transacao)
+                .WithMany()
+                .HasForeignKey(x => x.TransacaoId);
         });
     }
 }

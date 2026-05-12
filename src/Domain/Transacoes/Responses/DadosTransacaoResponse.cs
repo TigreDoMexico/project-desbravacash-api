@@ -28,7 +28,7 @@ public class DadosTransacaoResponse
             Valor = transacao.Valor.ToString(),
             Descricao = transacao.Descricao,
             Tipo = transacao.Tipo.ToString(),
-            Status = transacao.Status.ToString(),
+            // Status = transacao.Status.ToString(),
             Mes = cultura.TextInfo.ToTitleCase(transacao.CriadoEm.ToString("MMMM", cultura)),
             NomeUnidade = transacao.Unidade?.Nome,
         };
