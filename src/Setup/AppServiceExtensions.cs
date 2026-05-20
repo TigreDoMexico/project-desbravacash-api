@@ -91,8 +91,8 @@ public static class AppServiceExtensions
         builder.Services.AddAuthorization(options =>
         {
             options.AddPolicy("Admin", policy => policy.RequireRole(nameof(UsuarioRole.Admin)));
-            options.AddPolicy("Tesoureiro",
-                policy => policy.RequireRole(nameof(UsuarioRole.Tesoureiro), nameof(UsuarioRole.Admin)));
+            options.AddPolicy("Tesoureiro", policy => policy.RequireRole(nameof(UsuarioRole.Tesoureiro), nameof(UsuarioRole.Admin)));
+            options.AddPolicy("Conselheiro", policy => policy.RequireRole(nameof(UsuarioRole.Conselheiro)));
         });
 
         return builder;

@@ -1,4 +1,5 @@
 using System.Security.Claims;
+using FluentValidation;
 using TigreDoMexico.DesbravaCash.Api.Domain.Solicitacoes.Requests;
 using TigreDoMexico.DesbravaCash.Api.Domain.Solicitacoes.Services;
 using TigreDoMexico.DesbravaCash.Api.Modules.Abstractions;
@@ -18,11 +19,17 @@ public class SolicitacaoEndpoints : IEndpoint
         endpoints.MapPost("/api/solicitacoes", async (
             DadosSolicitacaoRequest request,
             ClaimsPrincipal user,
+            IValidator<DadosSolicitacaoRequest> validator,
             ISolicitacaoService service,
             CancellationToken ct) =>
         {
+            var validation = await validator.ValidateAsync(request, ct);
+            if (!validation.IsValid)
+                return Results.ValidationProblem(validation.ToDictionary());
+
             var unidadeId = Guid.Parse(user.FindFirstValue("unidade_id")!);
             var criadoPor = Guid.Parse(user.FindFirstValue(ClaimTypes.NameIdentifier)!);
+
             await service.CriarAsync(unidadeId, criadoPor, request.Descricao, request.Valor, null, ct);
             return Results.Created();
         }).RequireAuthorization();
@@ -35,6 +42,7 @@ public class SolicitacaoEndpoints : IEndpoint
         {
             var unidadeId = Guid.Parse(user.FindFirstValue("unidade_id")!);
             var criadoPor = Guid.Parse(user.FindFirstValue(ClaimTypes.NameIdentifier)!);
+
             var sucesso = await service.CriarPorDesafioAsync(desafioId, unidadeId, criadoPor, ct);
             return sucesso ? Results.Created() : Results.NotFound();
         }).RequireAuthorization();
@@ -47,6 +55,7 @@ public class SolicitacaoEndpoints : IEndpoint
             CancellationToken ct) =>
         {
             var aprovadoPor = Guid.Parse(user.FindFirstValue(ClaimTypes.NameIdentifier)!);
+
             var sucesso = await service.AprovarAsync(id, aprovadoPor, request.Valor, ct);
             return sucesso ? Results.NoContent() : Results.NotFound();
         }).RequireAuthorization(RolesConsts.Admin);

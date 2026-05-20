@@ -7,11 +7,11 @@ public class Desafio
 {
     [Required]
     public Guid Id { get; set; }
-    
+
     [Required]
     [MaxLength(DesafioConsts.MaxLengthDescricao)]
     public string Descricao { get; set; } = string.Empty;
-    
+
     [Required]
     public int Pontuacao { get; set; }
 
@@ -19,11 +19,11 @@ public class Desafio
     public DateTime DataConclusao { get; set; }
 
     [Required]
-    public bool PodeSolicitar { get; set; } = false;
+    public bool PodeSolicitar { get; set; }
 
     [NotMapped]
     public bool Solicitado { get; set; }
-    
+
     [NotMapped]
     public bool Concluido { get; set; }
 }
