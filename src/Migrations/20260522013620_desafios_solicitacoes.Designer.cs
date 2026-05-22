@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using TigreDoMexico.DesbravaCash.Api.Infrastructure.Data;
@@ -11,9 +12,11 @@ using TigreDoMexico.DesbravaCash.Api.Infrastructure.Data;
 namespace TigreDoMexico.DesbravaCash.Api.Migrations
 {
     [DbContext(typeof(DesbravaCashDbContext))]
-    partial class DesbravaCashDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260522013620_desafios_solicitacoes")]
+    partial class desafios_solicitacoes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -93,6 +96,9 @@ namespace TigreDoMexico.DesbravaCash.Api.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("unidade_id");
 
+                    b.Property<Guid?>("UnidadeId1")
+                        .HasColumnType("uuid");
+
                     b.Property<int>("Valor")
                         .HasColumnType("integer")
                         .HasColumnName("valor");
@@ -106,6 +112,8 @@ namespace TigreDoMexico.DesbravaCash.Api.Migrations
                     b.HasIndex("TransacaoId");
 
                     b.HasIndex("UnidadeId");
+
+                    b.HasIndex("UnidadeId1");
 
                     b.ToTable("solicitacao", (string)null);
                 });
@@ -136,8 +144,7 @@ namespace TigreDoMexico.DesbravaCash.Api.Migrations
                         .HasColumnName("tipo");
 
                     b.Property<Guid>("UnidadeId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("unidade_id");
+                        .HasColumnType("uuid");
 
                     b.Property<int>("Valor")
                         .HasColumnType("integer")
@@ -233,10 +240,14 @@ namespace TigreDoMexico.DesbravaCash.Api.Migrations
                         .HasForeignKey("TransacaoId");
 
                     b.HasOne("TigreDoMexico.DesbravaCash.Api.Domain.Unidades.Models.Unidade", "Unidade")
-                        .WithMany("Solicitacoes")
+                        .WithMany()
                         .HasForeignKey("UnidadeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("TigreDoMexico.DesbravaCash.Api.Domain.Unidades.Models.Unidade", null)
+                        .WithMany("Solicitacoes")
+                        .HasForeignKey("UnidadeId1");
 
                     b.Navigation("CriadoPorUsuario");
 

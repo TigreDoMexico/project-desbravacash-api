@@ -14,6 +14,8 @@ public class DesafioRepository(DesbravaCashDbContext db) : IDesafioRepository
                 Id = d.Id,
                 Descricao = d.Descricao,
                 Pontuacao = d.Pontuacao,
+                DataConclusao = d.DataConclusao,
+                PodeSolicitar = d.PodeSolicitar,
 
                 Solicitado = db.Solicitacoes.Any(s =>
                     s.UnidadeId == unidadeId &&
@@ -24,6 +26,7 @@ public class DesafioRepository(DesbravaCashDbContext db) : IDesafioRepository
                     s.DesafioId == d.Id &&
                     s.Status == StatusSolicitacao.Aprovado)
             })
+            .OrderBy(d => d.DataConclusao)
             .ToListAsync(ct);
 
     public async Task<Desafio?> ObterPorIdAsync(Guid id, CancellationToken ct)

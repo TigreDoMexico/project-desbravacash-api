@@ -64,6 +64,7 @@ public class DesbravaCashDbContext(DbContextOptions<DesbravaCashDbContext> optio
             e.Property(x => x.Descricao).HasColumnName("descricao").IsRequired();
             e.Property(x => x.CriadoEm).HasColumnName("criado_em").IsRequired();
             e.Property(x => x.CriadoPor).HasColumnName("criado_por").IsRequired();
+            e.Property(x => x.UnidadeId).HasColumnName("unidade_id").IsRequired();
             e.HasOne(x => x.Unidade)
                 .WithMany(x => x.Transacoes)
                 .HasForeignKey(x => x.UnidadeId);
@@ -87,7 +88,7 @@ public class DesbravaCashDbContext(DbContextOptions<DesbravaCashDbContext> optio
             e.Property(x => x.DesafioId).HasColumnName("desafio_id");
             e.Property(x => x.TransacaoId).HasColumnName("transacao_id");
             e.HasOne(x => x.Unidade)
-                .WithMany()
+                .WithMany(x => x.Solicitacoes)
                 .HasForeignKey(x => x.UnidadeId);
             e.HasOne(x => x.CriadoPorUsuario)
                 .WithMany()

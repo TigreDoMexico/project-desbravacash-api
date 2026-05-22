@@ -71,6 +71,12 @@ public class SolicitacaoService(
                 return false;
             }
 
+            var jaExiste = await repository.ExisteSolicitacaoAtivaAsync(unidadeId, desafioId, ct);
+            if (jaExiste)
+            {
+                logger.LogWarning("Unidade {unidadeId} já possui solicitação ativa para o desafio {desafioId}", unidadeId, desafioId);
+                return false;
+            }
         }
         catch (Exception ex)
         {

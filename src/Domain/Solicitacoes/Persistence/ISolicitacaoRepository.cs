@@ -14,4 +14,6 @@ public interface ISolicitacaoRepository
     Task AtualizarComTransacaoAsync(Solicitacao solicitacao, Transacao transacao, CancellationToken ct);
     
     Task AtualizarAsync(Solicitacao solicitacao, CancellationToken ct);
+
+    Task<bool> ExisteSolicitacaoAtivaAsync(Guid unidadeId, Guid desafioId, CancellationToken ct);
 }
