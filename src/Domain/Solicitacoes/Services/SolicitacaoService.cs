@@ -44,10 +44,14 @@ public class SolicitacaoService(
 
             await repository.CriarAsync(solicitacao, ct);
         }
+        catch (SolicitacaoException)
+        {
+            throw;
+        }
         catch (Exception ex)
         {
             logger.LogError(ex, "Erro ao criar solicitacao. {ex}", ex);
-            throw;
+            throw new SolicitacaoException("Ocorreu um erro ao criar a solicitação. Tente novamente.");
         }
 
         logger.LogInformation("Solicitacao criada com sucesso!");
@@ -65,23 +69,33 @@ public class SolicitacaoService(
         try
         {
             desafio = await desafioRepository.ObterPorIdAsync(desafioId, ct);
-            if (desafio is null || !desafio.PodeSolicitar)
+            if (desafio is null)
             {
-                logger.LogWarning("Desafio {desafioId} não encontrado ou não pode ser solicitado", desafioId);
+                logger.LogWarning("Desafio {desafioId} não encontrado", desafioId);
                 return false;
             }
 
-            var jaExiste = await repository.ExisteSolicitacaoAtivaAsync(unidadeId, desafioId, ct);
+            if (!desafio.PodeSolicitar)
+            {
+                logger.LogWarning("Desafio {desafioId} não pode ser solicitado", desafioId);
+                throw new SolicitacaoException("Este desafio não está disponível para solicitação.");
+            }
+
+            var jaExiste = await repository.ExisteSolicitacaoAtivaAsync(unidadeId, ct);
             if (jaExiste)
             {
                 logger.LogWarning("Unidade {unidadeId} já possui solicitação ativa para o desafio {desafioId}", unidadeId, desafioId);
-                return false;
+                throw new SolicitacaoException("Já existe uma solicitação ativa para esta unidade.");
             }
+        }
+        catch (SolicitacaoException)
+        {
+            throw;
         }
         catch (Exception ex)
         {
             logger.LogError(ex, "Erro ao buscar desafio. {ex}", ex);
-            throw;
+            throw new SolicitacaoException("Ocorreu um erro ao processar a solicitação. Tente novamente.");
         }
 
         await CriarAsync(unidadeId, criadoPor, desafio.Descricao, desafio.Pontuacao, desafio.Id, ct);

@@ -1,7 +1,10 @@
 using System.Security.Claims;
 using FluentValidation;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using TigreDoMexico.DesbravaCash.Api.Domain.Solicitacoes.Requests;
 using TigreDoMexico.DesbravaCash.Api.Domain.Solicitacoes.Services;
+using TigreDoMexico.DesbravaCash.Api.Domain.Solicitacoes;
 using TigreDoMexico.DesbravaCash.Api.Modules.Abstractions;
 
 namespace TigreDoMexico.DesbravaCash.Api.Domain.Solicitacoes;
@@ -30,8 +33,19 @@ public class SolicitacaoEndpoints : IEndpoint
             var unidadeId = Guid.Parse(user.FindFirstValue("unidade_id")!);
             var criadoPor = Guid.Parse(user.FindFirstValue(ClaimTypes.NameIdentifier)!);
 
-            await service.CriarAsync(unidadeId, criadoPor, request.Descricao, request.Valor, null, ct);
-            return Results.Created();
+            try
+            {
+                await service.CriarAsync(unidadeId, criadoPor, request.Descricao, request.Valor, null, ct);
+                return Results.Created();
+            }
+            catch (SolicitacaoException ex)
+            {
+                return Results.BadRequest(new ApiError(ex.Message));
+            }
+            catch
+            {
+                return Results.BadRequest(new ApiError("Ocorreu um erro ao criar a solicitação. Tente novamente."));
+            }
         }).RequireAuthorization();
 
         endpoints.MapPost("/api/solicitacoes/desafio/{desafioId:guid}", async (
@@ -43,20 +57,31 @@ public class SolicitacaoEndpoints : IEndpoint
             var unidadeId = Guid.Parse(user.FindFirstValue("unidade_id")!);
             var criadoPor = Guid.Parse(user.FindFirstValue(ClaimTypes.NameIdentifier)!);
 
-            var sucesso = await service.CriarPorDesafioAsync(desafioId, unidadeId, criadoPor, ct);
-            return sucesso ? Results.Created() : Results.NotFound();
+            try
+            {
+                var sucesso = await service.CriarPorDesafioAsync(desafioId, unidadeId, criadoPor, ct);
+                return sucesso ? Results.Created() : Results.NotFound();
+            }
+            catch (SolicitacaoException ex)
+            {
+                return Results.BadRequest(new ApiError(ex.Message));
+            }
+            catch
+            {
+                return Results.BadRequest(new ApiError("Ocorreu um erro ao processar a solicitação. Tente novamente."));
+            }
         }).RequireAuthorization();
 
         endpoints.MapPut("/api/solicitacoes/{id:guid}/aprovar", async (
             Guid id,
-            AprovarSolicitacaoRequest request,
+            [FromBody(EmptyBodyBehavior = EmptyBodyBehavior.Allow)] AprovarSolicitacaoRequest? request,
             ClaimsPrincipal user,
             ISolicitacaoService service,
             CancellationToken ct) =>
         {
             var aprovadoPor = Guid.Parse(user.FindFirstValue(ClaimTypes.NameIdentifier)!);
 
-            var sucesso = await service.AprovarAsync(id, aprovadoPor, request.Valor, ct);
+            var sucesso = await service.AprovarAsync(id, aprovadoPor, request?.Valor, ct);
             return sucesso ? Results.NoContent() : Results.NotFound();
         }).RequireAuthorization(RolesConsts.Admin);
 

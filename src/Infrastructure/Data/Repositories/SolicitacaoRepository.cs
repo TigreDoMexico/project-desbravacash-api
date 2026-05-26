@@ -37,10 +37,10 @@ public class SolicitacaoRepository(DesbravaCashDbContext db) : ISolicitacaoRepos
         await db.SaveChangesAsync(ct);
     }
 
-    public async Task<bool> ExisteSolicitacaoAtivaAsync(Guid unidadeId, Guid desafioId, CancellationToken ct)
+    public async Task<bool> ExisteSolicitacaoAtivaAsync(Guid unidadeId, CancellationToken ct)
         => await db.Solicitacoes.AnyAsync(
             s => s.UnidadeId == unidadeId
-              && s.DesafioId == desafioId
-              && s.Status != StatusSolicitacao.Rejeitado,
+              && s.DesafioId != null
+              && s.Status == StatusSolicitacao.Solicitado,
             ct);
 }

@@ -19,7 +19,8 @@ public class DesafioRepository(DesbravaCashDbContext db) : IDesafioRepository
 
                 Solicitado = db.Solicitacoes.Any(s =>
                     s.UnidadeId == unidadeId &&
-                    s.DesafioId == d.Id),
+                    s.DesafioId == d.Id &&
+                    s.Status != StatusSolicitacao.Rejeitado),
 
                 Concluido = db.Solicitacoes.Any(s =>
                     s.UnidadeId == unidadeId &&

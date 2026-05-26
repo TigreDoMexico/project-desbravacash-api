@@ -15,5 +15,5 @@ public interface ISolicitacaoRepository
     
     Task AtualizarAsync(Solicitacao solicitacao, CancellationToken ct);
 
-    Task<bool> ExisteSolicitacaoAtivaAsync(Guid unidadeId, Guid desafioId, CancellationToken ct);
+    Task<bool> ExisteSolicitacaoAtivaAsync(Guid unidadeId, CancellationToken ct);
 }

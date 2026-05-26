@@ -27,7 +27,10 @@ public class UnidadeServiceTest
             .RuleFor(x => x.Transacoes, new AutoFaker<Transacao>()
                 .RuleFor(x => x.Valor, valorTransacao)
                 .RuleFor(x => x.Tipo, TipoTransacao.Credito)
+                .RuleFor(x => x.Unidade, _ => null!)
                 .Generate(totalTransacoes))
+            .RuleFor(x => x.Solicitacoes, _ => [])
+            .RuleFor(x => x.Usuarios, _ => [])
             .Generate();
 
         _unidadeRepository
@@ -60,7 +63,10 @@ public class UnidadeServiceTest
             .RuleFor(x => x.Transacoes, new AutoFaker<Transacao>()
                 .RuleFor(x => x.Valor, valorTransacao)
                 .RuleFor(x => x.Tipo, TipoTransacao.Debito)
+                .RuleFor(x => x.Unidade, _ => null!)
                 .Generate(totalTransacoes))
+            .RuleFor(x => x.Solicitacoes, _ => [])
+            .RuleFor(x => x.Usuarios, _ => [])
             .Generate();
 
         _unidadeRepository
