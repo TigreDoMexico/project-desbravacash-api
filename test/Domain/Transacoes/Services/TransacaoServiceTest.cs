@@ -17,7 +17,10 @@ public class TransacaoServiceTest
     public async Task ObterTransacoesPorUnidadeAsync_Deve_Retornar_Transacoes_Da_Unidade()
     {
         var unidadeId = Guid.NewGuid();
-        var transacoes = new AutoFaker<Transacao>().Generate(3);
+        var transacoes = new AutoFaker<Transacao>()
+            .RuleFor(x => x.Unidade, _ => null!)
+            .RuleFor(x => x.CriadoPorUsuario, _ => null!)
+            .Generate(3);
 
         _repository.ListarTodasTransacoesPorUnidadeAsync(unidadeId, Arg.Any<CancellationToken>()).Returns(transacoes);
 

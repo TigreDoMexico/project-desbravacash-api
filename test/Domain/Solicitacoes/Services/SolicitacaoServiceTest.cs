@@ -5,6 +5,7 @@ using TigreDoMexico.DesbravaCash.Api.Domain.Desafios.Models;
 using TigreDoMexico.DesbravaCash.Api.Domain.Desafios.Persistence;
 using TigreDoMexico.DesbravaCash.Api.Domain.Solicitacoes.Models;
 using TigreDoMexico.DesbravaCash.Api.Domain.Solicitacoes.Persistence;
+using TigreDoMexico.DesbravaCash.Api.Domain.Solicitacoes;
 using TigreDoMexico.DesbravaCash.Api.Domain.Solicitacoes.Services;
 using TigreDoMexico.DesbravaCash.Api.Domain.Transacoes.Models;
 
@@ -64,22 +65,26 @@ public class SolicitacaoServiceTest
     }
 
     [Fact]
-    public async Task CriarPorDesafioAsync_Deve_Retornar_False_Quando_Desafio_NaoPodeSolicitar()
+    public async Task CriarPorDesafioAsync_Deve_LancarExcecao_Quando_Desafio_NaoPodeSolicitar()
     {
-        var desafio = new AutoFaker<Desafio>().RuleFor(d => d.PodeSolicitar, false).Generate();
+        var desafio = new AutoFaker<Desafio>()
+            .RuleFor(d => d.PodeSolicitar, false)
+            .Generate();
 
         _desafioRepository.ObterPorIdAsync(desafio.Id, Arg.Any<CancellationToken>()).Returns(desafio);
 
-        var resultado = await _service.CriarPorDesafioAsync(desafio.Id, Guid.NewGuid(), Guid.NewGuid(), CancellationToken.None);
+        await Assert.ThrowsAsync<SolicitacaoException>(() =>
+            _service.CriarPorDesafioAsync(desafio.Id, Guid.NewGuid(), Guid.NewGuid(), CancellationToken.None));
 
-        Assert.False(resultado);
         await _repository.DidNotReceive().CriarAsync(Arg.Any<Solicitacao>(), Arg.Any<CancellationToken>());
     }
 
     [Fact]
     public async Task CriarPorDesafioAsync_Deve_Criar_Solicitacao_E_Retornar_True_Quando_Desafio_Valido()
     {
-        var desafio = new AutoFaker<Desafio>().RuleFor(d => d.PodeSolicitar, true).Generate();
+        var desafio = new AutoFaker<Desafio>()
+            .RuleFor(d => d.PodeSolicitar, true)
+            .Generate();
         var unidadeId = Guid.NewGuid();
         var criadoPor = Guid.NewGuid();
 
@@ -103,7 +108,9 @@ public class SolicitacaoServiceTest
     public async Task ListarTodasAsync_Deve_Retornar_Lista_Mapeada()
     {
         var solicitacoes = new AutoFaker<Solicitacao>()
-            .RuleFor(s => s.Unidade, new AutoFaker<TigreDoMexico.DesbravaCash.Api.Domain.Unidades.Models.Unidade>().Generate())
+            .RuleFor(s => s.Unidade, _ => new TigreDoMexico.DesbravaCash.Api.Domain.Unidades.Models.Unidade { Id = Guid.NewGuid(), Nome = "Test" })
+            .RuleFor(s => s.CriadoPorUsuario, _ => null!)
+            .RuleFor(s => s.Transacao, _ => null)
             .Generate(3);
 
         _repository.ListarTodasAsync(Arg.Any<CancellationToken>()).Returns(solicitacoes);
@@ -127,7 +134,7 @@ public class SolicitacaoServiceTest
     [Fact]
     public async Task AprovarAsync_Deve_Retornar_False_Quando_Status_Nao_Solicitado()
     {
-        var solicitacao = new AutoFaker<Solicitacao>().RuleFor(s => s.Status, StatusSolicitacao.Aprovado).Generate();
+        var solicitacao = new AutoFaker<Solicitacao>().RuleFor(s => s.Status, StatusSolicitacao.Aprovado).RuleFor(s => s.Unidade, _ => null!).RuleFor(s => s.CriadoPorUsuario, _ => null!).RuleFor(s => s.Transacao, _ => null).Generate();
 
         _repository.ObterPorIdAsync(solicitacao.Id, Arg.Any<CancellationToken>()).Returns(solicitacao);
 
@@ -140,7 +147,7 @@ public class SolicitacaoServiceTest
     [Fact]
     public async Task AprovarAsync_Deve_Aprovar_Com_Valor_Da_Solicitacao_Quando_Valor_Nao_Informado()
     {
-        var solicitacao = new AutoFaker<Solicitacao>().RuleFor(s => s.Status, StatusSolicitacao.Solicitado).Generate();
+        var solicitacao = new AutoFaker<Solicitacao>().RuleFor(s => s.Status, StatusSolicitacao.Solicitado).RuleFor(s => s.Unidade, _ => null!).RuleFor(s => s.CriadoPorUsuario, _ => null!).RuleFor(s => s.Transacao, _ => null).Generate();
         var aprovadoPor = Guid.NewGuid();
 
         _repository.ObterPorIdAsync(solicitacao.Id, Arg.Any<CancellationToken>()).Returns(solicitacao);
@@ -162,7 +169,7 @@ public class SolicitacaoServiceTest
     [Fact]
     public async Task AprovarAsync_Deve_Usar_Valor_Informado_Quando_Fornecido()
     {
-        var solicitacao = new AutoFaker<Solicitacao>().RuleFor(s => s.Status, StatusSolicitacao.Solicitado).Generate();
+        var solicitacao = new AutoFaker<Solicitacao>().RuleFor(s => s.Status, StatusSolicitacao.Solicitado).RuleFor(s => s.Unidade, _ => null!).RuleFor(s => s.CriadoPorUsuario, _ => null!).RuleFor(s => s.Transacao, _ => null).Generate();
         var valorOverride = 999;
 
         _repository.ObterPorIdAsync(solicitacao.Id, Arg.Any<CancellationToken>()).Returns(solicitacao);
@@ -189,7 +196,7 @@ public class SolicitacaoServiceTest
     [Fact]
     public async Task ReprovarAsync_Deve_Retornar_False_Quando_Status_Nao_Solicitado()
     {
-        var solicitacao = new AutoFaker<Solicitacao>().RuleFor(s => s.Status, StatusSolicitacao.Aprovado).Generate();
+        var solicitacao = new AutoFaker<Solicitacao>().RuleFor(s => s.Status, StatusSolicitacao.Aprovado).RuleFor(s => s.Unidade, _ => null!).RuleFor(s => s.CriadoPorUsuario, _ => null!).RuleFor(s => s.Transacao, _ => null).Generate();
 
         _repository.ObterPorIdAsync(solicitacao.Id, Arg.Any<CancellationToken>()).Returns(solicitacao);
 
@@ -202,7 +209,7 @@ public class SolicitacaoServiceTest
     [Fact]
     public async Task ReprovarAsync_Deve_Reprovar_E_Retornar_True_Quando_Solicitacao_Valida()
     {
-        var solicitacao = new AutoFaker<Solicitacao>().RuleFor(s => s.Status, StatusSolicitacao.Solicitado).Generate();
+        var solicitacao = new AutoFaker<Solicitacao>().RuleFor(s => s.Status, StatusSolicitacao.Solicitado).RuleFor(s => s.Unidade, _ => null!).RuleFor(s => s.CriadoPorUsuario, _ => null!).RuleFor(s => s.Transacao, _ => null).Generate();
 
         _repository.ObterPorIdAsync(solicitacao.Id, Arg.Any<CancellationToken>()).Returns(solicitacao);
 

@@ -17,7 +17,7 @@ public class UsuarioServiceTest
         _service = new UsuarioService(_repository);
     }
 
-    [Fact(Skip = "Teste muito demorado. Ver forma de tornar mais simples")]
+    [Fact]
     public async Task AcessarAsync_Deve_Retornar_Usuario_Quando_Credenciais_Validas()
     {
         var senhaPlana = "senha123";
@@ -32,7 +32,7 @@ public class UsuarioServiceTest
         Assert.Equal(usuario, resultado);
     }
     
-    [Fact(Skip = "Teste muito demorado. Ver forma de tornar mais simples")]
+    [Fact]
     public async Task AcessarAsync_Deve_Retornar_Null_Quando_Usuario_Nao_Encontrado()
     {
         var faker = new AutoFaker<Usuario>().Generate();
@@ -44,7 +44,7 @@ public class UsuarioServiceTest
         Assert.Null(resultado);
     }
 
-    [Fact(Skip = "Teste muito demorado. Ver forma de tornar mais simples")]
+    [Fact]
     public async Task AcessarAsync_Deve_Retornar_Null_Quando_Senha_Invalida()
     {
         var usuario = new AutoFaker<Usuario>()
