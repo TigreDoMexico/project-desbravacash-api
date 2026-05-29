@@ -52,5 +52,4 @@ jobs:
               Jwt__Issuer='${{ secrets.JWT_ISSUER }}' \
               Jwt__Audience='${{ secrets.JWT_AUDIENCE }}' \
               ConnectionStrings__Postgres='${{ secrets.DB_CONNECTIONSTRING }}'
-              Database__CertBase64='${{ secrets.DBCERT_BASE64 }}'
               Cors__AllowedOrigins__0='${{ secrets.CORS_URL }}'
