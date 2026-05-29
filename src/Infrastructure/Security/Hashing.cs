@@ -1,4 +1,4 @@
-﻿using System.Security.Cryptography;
+using System.Security.Cryptography;
 
 namespace TigreDoMexico.DesbravaCash.Api.Infrastructure.Security;
 
@@ -6,7 +6,7 @@ public static class Hashing
 {
     private const int SaltSize = 16;
     private const int HashSize = 32;
-    private const int Iterations = 600_000;
+    private static readonly int Iterations = 600_000;
     private static readonly HashAlgorithmName Algorithm = HashAlgorithmName.SHA256;
     private const char Separator = ':';
 

@@ -12,7 +12,10 @@ public class UsuarioServiceTest
     private readonly IUsuarioRepository _repository = Substitute.For<IUsuarioRepository>();
     private readonly UsuarioService _service;
 
-    public UsuarioServiceTest() => _service = new UsuarioService(_repository);
+    public UsuarioServiceTest()
+    {
+        _service = new UsuarioService(_repository);
+    }
 
     [Fact]
     public async Task AcessarAsync_Deve_Retornar_Usuario_Quando_Credenciais_Validas()
@@ -28,7 +31,7 @@ public class UsuarioServiceTest
 
         Assert.Equal(usuario, resultado);
     }
-
+    
     [Fact]
     public async Task AcessarAsync_Deve_Retornar_Null_Quando_Usuario_Nao_Encontrado()
     {

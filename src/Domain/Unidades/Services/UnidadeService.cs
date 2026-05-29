@@ -30,8 +30,7 @@ public class UnidadeService(IUnidadeRepository repository, IUsuarioRepository us
             return null;
         }
 
-        var transacoesAprovadas = unidade.Transacoes.Where(t => t.Status == StatusTransacao.Aprovado);
-        var saldo = transacoesAprovadas.Sum(t => t.Tipo == TipoTransacao.Credito ? t.Valor : -t.Valor);
+        var saldo = unidade.Transacoes.Sum(t => t.Tipo == TipoTransacao.Credito ? t.Valor : -t.Valor);
 
         return new ObterUnidadeDashResponse
         {

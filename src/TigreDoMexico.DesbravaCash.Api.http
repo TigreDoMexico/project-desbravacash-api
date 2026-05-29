@@ -35,32 +35,45 @@ Authorization: Bearer {{TOKEN}}
 GET {{API_URL}}/api/transacoes
 Authorization: Bearer {{TOKEN}}
 
-### Listar todas as Transações Pendentes
+### Listar Solicitações (Admin)
 
-GET {{API_URL}}/api/transacoes/pendentes
+GET {{API_URL}}/api/solicitacoes
 Authorization: Bearer {{TOKEN}}
 
-### Cria uma nova Transação
+### Criar Solicitação
 
-POST {{API_URL}}/api/transacoes
+POST {{API_URL}}/api/solicitacoes
 Content-Type: application/json
 Authorization: Bearer {{TOKEN}}
 
 {
-  "unidadeId": "00000000-0000-0000-0000-000000000000",
-  "valor": 100,
-  "descricao": "Descrição da transação",
-  "tipoTransacao": 1
+  "descricao": "Descrição da solicitação",
+  "valor": 100
 }
 
-### Atualiza o status de uma Transação
+### Criar Solicitação por Desafio
 
-PUT {{API_URL}}/api/transacoes/00000000-0000-0000-0000-000000000000/status
+POST {{API_URL}}/api/solicitacoes/desafio/00000000-0000-0000-0000-000000000000
+Authorization: Bearer {{TOKEN}}
+
+### Aprovar Solicitação (Admin)
+
+PUT {{API_URL}}/api/solicitacoes/00000000-0000-0000-0000-000000000000/aprovar
 Content-Type: application/json
 Authorization: Bearer {{TOKEN}}
 
 {
-  "status": 1
+  "valor": 100
 }
+
+### Reprovar Solicitação (Admin)
+
+PUT {{API_URL}}/api/solicitacoes/00000000-0000-0000-0000-000000000000/reprovar
+Authorization: Bearer {{TOKEN}}
+
+### Listar Desafios da Unidade
+
+GET {{API_URL}}/api/desafios
+Authorization: Bearer {{TOKEN}}
 
 ###

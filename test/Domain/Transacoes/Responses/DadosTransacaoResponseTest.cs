@@ -11,7 +11,6 @@ public class DadosTransacaoResponseTest
         Valor = 250,
         Descricao = "Pagamento mensal",
         Tipo = TipoTransacao.Credito,
-        Status = StatusTransacao.Aprovado,
         CriadoEm = new DateTimeOffset(2025, 1, 15, 0, 0, 0, TimeSpan.Zero),
     };
 
@@ -41,13 +40,6 @@ public class DadosTransacaoResponseTest
     {
         DadosTransacaoResponse response = _transacao;
         Assert.Equal(_transacao.Tipo.ToString(), response.Tipo);
-    }
-
-    [Fact]
-    public void Deve_Mapear_Status_Como_String()
-    {
-        DadosTransacaoResponse response = _transacao;
-        Assert.Equal(_transacao.Status.ToString(), response.Status);
     }
 
     [Theory]

@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using TigreDoMexico.DesbravaCash.Api.Domain.Solicitacoes.Models;
 using TigreDoMexico.DesbravaCash.Api.Domain.Transacoes.Models;
 using TigreDoMexico.DesbravaCash.Api.Domain.Usuarios.Models;
 
@@ -14,5 +15,8 @@ public class Unidade
     public string Nome { get; set; } = string.Empty;
 
     public ICollection<Transacao> Transacoes { get; set; } = [];
+
+    public ICollection<Solicitacao> Solicitacoes { get; set; } = [];
+
     public ICollection<Usuario> Usuarios { get; set; } = [];
 }

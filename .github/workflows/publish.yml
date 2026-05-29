@@ -2,12 +2,12 @@ name: Publish
 
 on:
   push:
-    branches: [ develop ]
+    branches: [ main ]
 
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: tigredomexico/project-desbravacash-api
-  VERSION: 0.1.1
+  VERSION: 0.2.0
 
 jobs:
   publish:

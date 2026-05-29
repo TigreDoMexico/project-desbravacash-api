@@ -5,8 +5,8 @@
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <UserSecretsId>d5531d3e-2630-446f-a876-6a2caa7480a0</UserSecretsId>
-        <Version>0.1.1</Version>
-        <AssemblyVersion>0.1.1</AssemblyVersion>
+        <Version>0.2.0</Version>
+        <AssemblyVersion>0.2.0</AssemblyVersion>
     </PropertyGroup>
 
     <ItemGroup>
@@ -29,6 +29,7 @@
     </ItemGroup>
 
     <ItemGroup>
+        <Folder Include="Domain\Solicitacoes\Responses\" />
         <Folder Include="Migrations\" />
     </ItemGroup>
 

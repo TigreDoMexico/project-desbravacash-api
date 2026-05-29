@@ -17,10 +17,98 @@ namespace TigreDoMexico.DesbravaCash.Api.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "10.0.5")
+                .HasAnnotation("ProductVersion", "9.0.6")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+
+            modelBuilder.Entity("TigreDoMexico.DesbravaCash.Api.Domain.Desafios.Models.Desafio", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<DateTime>("DataConclusao")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("data_conclusao");
+
+                    b.Property<string>("Descricao")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("descricao");
+
+                    b.Property<bool>("PodeSolicitar")
+                        .HasColumnType("boolean")
+                        .HasColumnName("pode_solicitar");
+
+                    b.Property<int>("Pontuacao")
+                        .HasColumnType("integer")
+                        .HasColumnName("pontuacao");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("desafio", (string)null);
+                });
+
+            modelBuilder.Entity("TigreDoMexico.DesbravaCash.Api.Domain.Solicitacoes.Models.Solicitacao", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<DateTimeOffset>("CriadoEm")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("criado_em");
+
+                    b.Property<Guid>("CriadoPor")
+                        .HasColumnType("uuid")
+                        .HasColumnName("criado_por");
+
+                    b.Property<Guid?>("DesafioId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("desafio_id");
+
+                    b.Property<string>("Descricao")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("descricao");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer")
+                        .HasColumnName("status");
+
+                    b.Property<int>("Tipo")
+                        .HasColumnType("integer")
+                        .HasColumnName("tipo");
+
+                    b.Property<Guid?>("TransacaoId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("transacao_id");
+
+                    b.Property<Guid>("UnidadeId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("unidade_id");
+
+                    b.Property<int>("Valor")
+                        .HasColumnType("integer")
+                        .HasColumnName("valor");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CriadoPor");
+
+                    b.HasIndex("DesafioId");
+
+                    b.HasIndex("TransacaoId");
+
+                    b.HasIndex("UnidadeId");
+
+                    b.ToTable("solicitacao", (string)null);
+                });
 
             modelBuilder.Entity("TigreDoMexico.DesbravaCash.Api.Domain.Transacoes.Models.Transacao", b =>
                 {
@@ -43,16 +131,13 @@ namespace TigreDoMexico.DesbravaCash.Api.Migrations
                         .HasColumnType("character varying(100)")
                         .HasColumnName("descricao");
 
-                    b.Property<int>("Status")
-                        .HasColumnType("integer")
-                        .HasColumnName("status");
-
                     b.Property<int>("Tipo")
                         .HasColumnType("integer")
                         .HasColumnName("tipo");
 
                     b.Property<Guid>("UnidadeId")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasColumnName("unidade_id");
 
                     b.Property<int>("Valor")
                         .HasColumnType("integer")
@@ -131,6 +216,37 @@ namespace TigreDoMexico.DesbravaCash.Api.Migrations
                     b.ToTable("usuario", (string)null);
                 });
 
+            modelBuilder.Entity("TigreDoMexico.DesbravaCash.Api.Domain.Solicitacoes.Models.Solicitacao", b =>
+                {
+                    b.HasOne("TigreDoMexico.DesbravaCash.Api.Domain.Usuarios.Models.Usuario", "CriadoPorUsuario")
+                        .WithMany()
+                        .HasForeignKey("CriadoPor")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("TigreDoMexico.DesbravaCash.Api.Domain.Desafios.Models.Desafio", "Desafio")
+                        .WithMany()
+                        .HasForeignKey("DesafioId");
+
+                    b.HasOne("TigreDoMexico.DesbravaCash.Api.Domain.Transacoes.Models.Transacao", "Transacao")
+                        .WithMany()
+                        .HasForeignKey("TransacaoId");
+
+                    b.HasOne("TigreDoMexico.DesbravaCash.Api.Domain.Unidades.Models.Unidade", "Unidade")
+                        .WithMany("Solicitacoes")
+                        .HasForeignKey("UnidadeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CriadoPorUsuario");
+
+                    b.Navigation("Desafio");
+
+                    b.Navigation("Transacao");
+
+                    b.Navigation("Unidade");
+                });
+
             modelBuilder.Entity("TigreDoMexico.DesbravaCash.Api.Domain.Transacoes.Models.Transacao", b =>
                 {
                     b.HasOne("TigreDoMexico.DesbravaCash.Api.Domain.Usuarios.Models.Usuario", "CriadoPorUsuario")
@@ -163,6 +279,8 @@ namespace TigreDoMexico.DesbravaCash.Api.Migrations
 
             modelBuilder.Entity("TigreDoMexico.DesbravaCash.Api.Domain.Unidades.Models.Unidade", b =>
                 {
+                    b.Navigation("Solicitacoes");
+
                     b.Navigation("Transacoes");
 
                     b.Navigation("Usuarios");

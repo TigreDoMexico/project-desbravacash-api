@@ -10,7 +10,7 @@ public class UsuarioModule : IModule
         ConfigurarDependencias(builder);
     }
 
-    public static void ConfigurarDependencias(WebApplicationBuilder builder)
+    private static void ConfigurarDependencias(WebApplicationBuilder builder)
     {
         builder.Services.AddScoped<IUsuarioService, UsuarioService>();
     }
