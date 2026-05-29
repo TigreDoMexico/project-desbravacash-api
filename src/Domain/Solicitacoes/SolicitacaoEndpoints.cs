@@ -30,12 +30,11 @@ public class SolicitacaoEndpoints : IEndpoint
             if (!validation.IsValid)
                 return Results.ValidationProblem(validation.ToDictionary());
 
-            var unidadeId = Guid.Parse(user.FindFirstValue("unidade_id")!);
             var criadoPor = Guid.Parse(user.FindFirstValue(ClaimTypes.NameIdentifier)!);
 
             try
             {
-                await service.CriarAsync(unidadeId, criadoPor, request.Descricao, request.Valor, null, ct);
+                await service.CriarAsync(request.UnidadeId, criadoPor, request.Descricao, request.Valor, null, ct);
                 return Results.Created();
             }
             catch (SolicitacaoException ex)

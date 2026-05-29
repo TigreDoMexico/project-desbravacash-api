@@ -91,7 +91,7 @@ public static class DesbravaCashSeeder
                 Senha = Hashing.HashSenha(senhaDesbravador ?? "senha"),
                 UnidadeId = unidadeId,
                 Cargo = "Desbravador",
-                Role = UsuarioRole.Tesoureiro,
+                Role = UsuarioRole.Desbravador,
             };
 
             context.Usuarios.Add(usuarioDesbravador);
