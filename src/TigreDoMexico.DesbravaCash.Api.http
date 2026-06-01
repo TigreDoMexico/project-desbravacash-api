@@ -1,0 +1,79 @@
+@API_URL = http://localhost:8080
+@TOKEN = <bearer_token>
+
+### Health Check
+
+GET {{API_URL}}/api/health
+
+### Versão da API
+
+GET {{API_URL}}/api/version
+
+### Autenticação
+
+POST {{API_URL}}/api/auth/login
+Content-Type: application/json
+Accept: application/json
+
+{
+  "telefone": "123456789",
+  "senha": "senha123"
+}
+
+### Listar dados da Unidade
+
+GET {{API_URL}}/api/unidades/dashboard
+Authorization: Bearer {{TOKEN}}
+
+### Obter lista de unidades
+
+GET {{API_URL}}/api/unidades
+Authorization: Bearer {{TOKEN}}
+
+### Listar Transações pela Unidade
+
+GET {{API_URL}}/api/transacoes
+Authorization: Bearer {{TOKEN}}
+
+### Listar Solicitações (Admin)
+
+GET {{API_URL}}/api/solicitacoes
+Authorization: Bearer {{TOKEN}}
+
+### Criar Solicitação
+
+POST {{API_URL}}/api/solicitacoes
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "descricao": "Descrição da solicitação",
+  "valor": 100
+}
+
+### Criar Solicitação por Desafio
+
+POST {{API_URL}}/api/solicitacoes/desafio/00000000-0000-0000-0000-000000000000
+Authorization: Bearer {{TOKEN}}
+
+### Aprovar Solicitação (Admin)
+
+PUT {{API_URL}}/api/solicitacoes/00000000-0000-0000-0000-000000000000/aprovar
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "valor": 100
+}
+
+### Reprovar Solicitação (Admin)
+
+PUT {{API_URL}}/api/solicitacoes/00000000-0000-0000-0000-000000000000/reprovar
+Authorization: Bearer {{TOKEN}}
+
+### Listar Desafios da Unidade
+
+GET {{API_URL}}/api/desafios
+Authorization: Bearer {{TOKEN}}
+
+###

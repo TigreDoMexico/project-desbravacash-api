@@ -1,0 +1,46 @@
+using TigreDoMexico.DesbravaCash.Api.Infrastructure.Data;
+using TigreDoMexico.DesbravaCash.Api.Modules;
+
+namespace TigreDoMexico.DesbravaCash.Api.Setup;
+
+public static class ApplicationBuilderExtensions
+{
+    public static IApplicationBuilder ConfigurarApplication(this IApplicationBuilder app)
+    {
+        app.UseAuthentication();
+        app.UseAuthorization();
+        return app;
+    }
+
+    public static WebApplication ConfigurarCors(this WebApplication app)
+    {
+        app.UseCors("AllowFrontend");
+        return app;
+    }
+
+    public static WebApplication ConfigurarRateLimit(this WebApplication app)
+    {
+        app.UseRateLimiter();
+        return app;
+    }
+
+    public static WebApplication MapearEndpoints(this WebApplication app)
+    {
+        var version = typeof(Program).Assembly.GetName().Version?.ToString(3) ?? "0.1.0";
+
+        app.MapHealthChecks("api/health");
+        app.MapGet("api/version", () => Results.Ok(new { version })).AllowAnonymous();
+        app.RegisterEndpoints();
+
+        return app;
+    }
+
+    public static async Task AdicionarSeedDados(this WebApplication app)
+    {
+        using var scope = app.Services.CreateScope();
+        var context = scope.ServiceProvider.GetRequiredService<DesbravaCashDbContext>();
+        var config = scope.ServiceProvider.GetRequiredService<IConfiguration>();
+
+        await DesbravaCashSeeder.SeedAsync(context, config);
+    }
+}
