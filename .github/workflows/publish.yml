@@ -7,7 +7,7 @@ on:
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: tigredomexico/project-desbravacash-api
-  VERSION: 0.2.0
+  VERSION: 0.2.1
 
 jobs:
   publish:
@@ -51,5 +51,5 @@ jobs:
               Jwt__Chave='${{ secrets.JWT_CHAVE }}' \
               Jwt__Issuer='${{ secrets.JWT_ISSUER }}' \
               Jwt__Audience='${{ secrets.JWT_AUDIENCE }}' \
-              ConnectionStrings__Postgres='${{ secrets.DB_CONNECTIONSTRING }}'
+              ConnectionStrings__Postgres='${{ secrets.DB_CONNECTIONSTRING }}' \
               Cors__AllowedOrigins__0='${{ secrets.CORS_URL }}'
